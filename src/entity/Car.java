@@ -21,7 +21,6 @@ public class Car {
 
     public void occupyCar(){
         free.set(false);
-        System.out.println("Car with ID " + getId() + " is taken!");
 
         try {
             TimeUnit.SECONDS.sleep(3);
