@@ -1,4 +1,6 @@
-package Entity;
+package entity;
+
+import java.util.List;
 
 public class Customer{
     private int id;
@@ -20,13 +22,16 @@ public class Customer{
         this.xPosition = xPosition;
     }
 
-    public void callTaxi(Car car){
+    public void callTaxi(List<Car> cars){
         System.out.println("Client with ID " + getId() + " calls taxi!");
 
-        if(car.isFree().get()) {
-            car.occupyCar();
-            System.out.println("Client with ID " + getId() + " rides on taxi!");
-            car.releaseCar();
+        for (Car car : cars) {
+            if (car.isFree().get()) {
+                car.occupyCar();
+                System.out.println("Client with ID " + getId() + " rides on taxi!");
+                car.releaseCar();
+                return;
+            }
         }
     }
 

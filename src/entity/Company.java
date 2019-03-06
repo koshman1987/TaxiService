@@ -1,10 +1,8 @@
-package Entity;
+package entity;
 
 import utils.CarPoolGenerator;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Company {
     private List<Car> carPool ;

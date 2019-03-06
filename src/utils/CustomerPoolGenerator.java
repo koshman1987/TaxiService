@@ -1,6 +1,6 @@
 package utils;
 
-import Entity.Customer;
+import entity.Customer;
 
 import java.util.ArrayList;
 import java.util.List;

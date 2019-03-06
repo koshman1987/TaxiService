@@ -1,6 +1,6 @@
 package utils;
 
-import Entity.Car;
+import entity.Car;
 
 import java.util.ArrayList;
 import java.util.List;

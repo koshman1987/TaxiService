@@ -1,4 +1,4 @@
-package Entity;
+package entity;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
