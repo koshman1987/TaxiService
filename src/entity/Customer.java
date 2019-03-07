@@ -1,58 +1,52 @@
 package entity;
 
-import java.util.concurrent.Semaphore;
+import java.util.logging.Logger;
 
-public class Customer implements Runnable{
-    private int id;
-    private int xPosition;
-    private Semaphore semaphore;
+public class Customer extends Thread {
+    private long id;
+    private int position;
 
-    public Customer(int id, Semaphore semaphore){
+    public static final Logger logger = Logger.getLogger(Customer.class.getName());
+
+    public Customer(int id) {
         this.id = id;
-        this.semaphore = semaphore;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public int getXPosition() {
-        return xPosition;
+    public int getPosition() {
+        return position;
     }
 
-    public void setXPosition(int xPosition) {
-        this.xPosition = xPosition;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
-    public void callTaxi(){
-        System.out.println("Client with ID " + getId() + " calls taxi!");
+    public void callTaxi() {
+        logger.info("Client with ID " + getId() + " calls taxi!");
 
-        for (Car car : Company.getCompany().getCarPool()) {
+        for (Car car : Company.getCompany().getCars()) {
+
             if (car.isFree().get()) {
-                car.occupyCar();
-                System.out.println("Car with ID " + car.getId() + " is taken by client with ID " + getId());
-                System.out.println("Client with ID " + getId() + " rides on car with ID " + car.getId());
-                car.releaseCar();
+                car.occupy();
+                logger.info("Car with ID " + car.getId() + " is taken by client with ID " + getId());
+                logger.info("Client with ID " + getId() + " rides on car with ID " + car.getId());
+                car.release();
                 return;
             }
+
         }
     }
 
     @Override
-    public void run(){
-
-        try {
-            semaphore.acquire();
-            callTaxi();
-        } catch (InterruptedException e){
-            System.out.println(e.getMessage());
-        }
-
-        semaphore.release();
+    public void run() {
+        callTaxi();
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Client with ID " + getId();
     }
 }

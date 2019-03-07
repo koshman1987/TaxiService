@@ -5,23 +5,23 @@ import utils.CarPoolGenerator;
 import java.util.List;
 
 public class Company {
-    private List<Car> carPool ;
+    private List<Car> cars;
     private static Company company = null;
 
-    private Company(){
-        carPool = CarPoolGenerator.getCars();
+    private Company() {
+        cars = CarPoolGenerator.getCars();
     }
 
-    public static synchronized Company getCompany(){
+    public static Company getCompany() {
 
-        if(company == null){
+        if (company == null) {
             company = new Company();
         }
 
         return company;
     }
 
-    public List<Car> getCarPool() {
-        return carPool;
+    public List<Car> getCars() {
+        return cars;
     }
 }
