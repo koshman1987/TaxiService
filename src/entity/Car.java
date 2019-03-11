@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Car {
+public class Car extends Thread {
     private int id;
     private AtomicBoolean free = new AtomicBoolean(true);
     private static final Logger logger = Logger.getLogger(Car.class.getName());
@@ -13,7 +13,7 @@ public class Car {
         this.id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -24,8 +24,8 @@ public class Car {
     public void occupy(Customer customer) {
         free.set(false);
         logger.log(Level.INFO, customer.toString() + " rides on " + toString());
-        customer.setTripIsDone(true);
         release();
+        customer.setTripIsDone(true);
     }
 
     private void release() {

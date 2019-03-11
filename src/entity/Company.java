@@ -1,10 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,14 +12,13 @@ public class Company {
     private static Company company = null;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
+    private static List<Car> cars = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(Company.class.getName());
-    private static Iterator<Car> iterator;
 
     private Company() {
     }
 
     public static Company getCompany() {
-        List<Car> cars = new ArrayList<>();
         lock.lock();
 
         try {
@@ -35,7 +31,6 @@ public class Company {
                 cars.add((new Car((int) (Math.random() * 100))));
             }
 
-            iterator = Collections.synchronizedCollection(cars).iterator();
             return company;
         } finally {
             lock.unlock();
@@ -48,17 +43,11 @@ public class Company {
     }
 
     private static void processOrder(Customer customer) {
-        while (iterator.hasNext()) {
-            if (iterator.next().isFree().get()) {
-                Car car = iterator.next();
+        for (Car car : cars) {
+            if (car.isFree().get()) {
 
                 if (!customer.isTripDone()) {
-                    try {
-                        car.occupy(customer);
-                        TimeUnit.SECONDS.sleep(2);
-                    } catch (InterruptedException e) {
-                        logger.log(Level.WARNING, e.getMessage());
-                    }
+                    car.occupy(customer);
                 }
 
             }
@@ -69,7 +58,7 @@ public class Company {
         getCompany();
 
         for (int i = 1; i < 6; i++) {
-            new Customer(i).start();
+            new Customer(i, lock).start();
         }
     }
 }
