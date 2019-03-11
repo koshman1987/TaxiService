@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Car extends Thread {
+public class Car {
     private int id;
     private AtomicBoolean free = new AtomicBoolean(true);
     private static final Logger logger = Logger.getLogger(Car.class.getName());
