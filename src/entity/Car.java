@@ -1,21 +1,16 @@
 package entity;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Car {
     private int id;
     private AtomicBoolean free = new AtomicBoolean(true);
-    private ReentrantLock lock;
+    private static final Logger logger = Logger.getLogger(Car.class.getName());
 
-    public static final Logger logger = Logger.getLogger(Car.class.getName());
-
-
-    public Car(int id, ReentrantLock lock) {
+    public Car(int id) {
         this.id = id;
-        this.lock = lock;
     }
 
     public int getId() {
@@ -26,22 +21,16 @@ public class Car {
         return free;
     }
 
-    public void occupy() {
-        lock.lock();
-
-        try {
-            free.set(false);
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            logger.warning(e.getMessage());
-        } finally {
-            lock.unlock();
-        }
+    public void occupy(Customer customer) {
+        free.set(false);
+        logger.log(Level.INFO, customer.toString() + " rides on " + toString());
+        customer.setTripIsDone(true);
+        release();
     }
 
-    public void release() {
+    private void release() {
         free.set(true);
-        logger.info("Car with ID " + getId() + " is free!");
+        logger.log(Level.INFO, toString() + " is free!");
     }
 
     @Override

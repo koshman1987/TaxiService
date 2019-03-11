@@ -1,18 +1,13 @@
 package entity;
 
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-
 public class Customer extends Thread {
     private long id;
     private int position;
-    private Company company;
+    private boolean tripIsDone;
 
-    public static final Logger logger = Logger.getLogger(Customer.class.getName());
 
     public Customer(int id) {
         this.id = id;
-        this.company = Company.getCompany();
     }
 
     public long getId() {
@@ -27,32 +22,17 @@ public class Customer extends Thread {
         this.position = position;
     }
 
-    public void callTaxi() {
-        logger.info("Client with ID " + getId() + " calls taxi!");
-
-        try {
-            for (Car car : company.getCars()) {
-
-                if (car.isFree().get()) {
-                    car.occupy();
-                    logger.info("Car with ID " + car.getId() + " is taken by client with ID " + getId());
-                    logger.info("Client with ID " + getId() + " rides on car with ID " + car.getId());
-                    TimeUnit.SECONDS.sleep(3);
-                    car.release();
-                    return;
-                }
-
-                Thread.sleep(1000);
-            }
-
-        } catch (InterruptedException e) {
-            logger.warning(e.getMessage());
-        }
-    }
-
     @Override
     public void run() {
-        callTaxi();
+        Company.placeOrder(this);
+    }
+
+    public void setTripIsDone(boolean tripIsDone) {
+        this.tripIsDone = tripIsDone;
+    }
+
+    public boolean isTripDone() {
+        return tripIsDone;
     }
 
     @Override
