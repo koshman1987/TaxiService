@@ -23,7 +23,7 @@ public class Car {
 
     public void occupy(final Customer customer) {
         free.set(false);
-        LOGGER.log(Level.INFO, customer.toString() + " rides on " + this.toString());
+        LOGGER.log(Level.INFO, customer.toString() + " rides on " + this);
         release();
         customer.setTripIsDone(true);
     }
