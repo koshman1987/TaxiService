@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class Car {
     private int id;
     private AtomicBoolean free = new AtomicBoolean(true);
-    private static final Logger logger = Logger.getLogger(Car.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Car.class.getName());
 
     public Car(int id) {
         this.id = id;
@@ -21,16 +21,16 @@ public class Car {
         return free;
     }
 
-    public void occupy(Customer customer) {
+    public void occupy(final Customer customer) {
         free.set(false);
-        logger.log(Level.INFO, customer.toString() + " rides on " + toString());
+        LOGGER.log(Level.INFO, customer.toString() + " rides on " + this.toString());
         release();
         customer.setTripIsDone(true);
     }
 
     private void release() {
         free.set(true);
-        logger.log(Level.INFO, toString() + " is free!");
+        LOGGER.log(Level.INFO, this.toString() + " is free!");
     }
 
     @Override
