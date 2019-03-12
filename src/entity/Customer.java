@@ -5,7 +5,6 @@ public class Customer extends Thread {
     private int position;
     private boolean tripIsDone;
 
-
     public Customer(int id) {
         this.id = id;
     }
@@ -24,7 +23,7 @@ public class Customer extends Thread {
 
     @Override
     public void run() {
-        Company.placeOrder(this);
+        Company.getInstance().placeOrder(this);
     }
 
     public void setTripIsDone(boolean tripIsDone) {

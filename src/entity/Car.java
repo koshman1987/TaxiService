@@ -13,7 +13,7 @@ public class Car {
         this.id = id;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

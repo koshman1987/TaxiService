@@ -9,60 +9,48 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Company {
-    private static Company company = null;
+    private static Company company;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
-    private static List<Car> cars = new ArrayList<>();
+    private static final int COUNT_OF_CARS = 10;
+    private List<Car> cars = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(Company.class.getName());
 
     private Company() {
     }
 
-    public static Company getCompany() {
-        lock.lock();
-
-        try {
-            if (!instanceCreated.get()) {
-                company = new Company();
-                instanceCreated.set(true);
-            }
-
-            for (int i = 0; i < 10; i++) {
-                cars.add((new Car((int) (Math.random() * 100))));
-            }
-
-            return company;
-        } finally {
-            lock.unlock();
+    {
+        for (int i = 0; i < COUNT_OF_CARS; i++) {
+            cars.add((new Car((int) (Math.random() * 100))));
         }
     }
 
-    public static void placeOrder(Customer customer) {
-        logger.log(Level.INFO, customer.toString() + " placed an order!");
-        Company.processOrder(customer);
+    public static Company getInstance() {
+        if (!instanceCreated.get()) {
+            lock.lock();
+
+            try {
+                company = new Company();
+                instanceCreated.set(true);
+            } finally {
+                lock.unlock();
+            }
+        }
+        return company;
     }
 
-    private static void processOrder(Customer customer) {
+    public void placeOrder(Customer customer) {
+        logger.log(Level.INFO, customer.toString() + " placed an order!");
+        processOrder(customer);
+    }
+
+    private void processOrder(Customer customer) {
         for (Car car : cars) {
             if (car.isFree().get()) {
-
                 if (!customer.isTripDone()) {
                     car.occupy(customer);
                 }
-
             }
-        }
-    }
-
-    private static int getDistance(Customer customer, Car car) {
-        return (int) Math.abs(customer.getPosition() - car.getId());
-    }
-
-    public static void main(String[] args) {
-        getCompany();
-
-        for (int i = 1; i < 6; i++) {
-            new Customer(i).start();
         }
     }
 }
