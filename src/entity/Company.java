@@ -36,7 +36,7 @@ public class Company {
     }
 
     public void placeOrder(final Customer customer) {
-        LOGGER.log(Level.INFO, customer.toString() + " placed an order!");
+        LOGGER.log(Level.INFO, customer + " placed an order!");
         processOrder(customer);
     }
 
