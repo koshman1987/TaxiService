@@ -1,5 +1,8 @@
 package entity;
 
+import parser.CarsFileReader;
+import parser.CarsParser;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,8 +15,8 @@ public class Company {
     private static Company company;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
-    private static final int COUNT_OF_CARS = 10;
     private List<Car> cars = new ArrayList<>();
+    private static final String FILE_PATH = "C:\\Users\\Viachaslau_Koshman\\IdeaProjects\\TaxiService\\cars.csv";
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
     private Company() {
@@ -51,8 +54,6 @@ public class Company {
     }
 
     private void prepareCars() {
-        for (int i = 0; i < COUNT_OF_CARS; i++) {
-            cars.add((new Car((int) (Math.random() * 100))));
-        }
+        cars = CarsParser.getInstance().getCars(CarsFileReader.getInstance().parseCarList(FILE_PATH));
     }
 }
