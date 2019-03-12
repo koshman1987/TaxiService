@@ -54,11 +54,15 @@ public class Company {
         }
     }
 
+    private static int getDistance(Customer customer, Car car) {
+        return (int) Math.abs(customer.getPosition() - car.getId());
+    }
+
     public static void main(String[] args) {
         getCompany();
 
         for (int i = 1; i < 6; i++) {
-            new Customer(i, lock).start();
+            new Customer(i).start();
         }
     }
 }
