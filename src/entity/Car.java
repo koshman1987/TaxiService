@@ -23,14 +23,14 @@ public class Car {
 
     public void occupy(final Customer customer) {
         free.set(false);
-        LOGGER.log(Level.INFO, customer.toString() + " rides on " + this);
+        LOGGER.log(Level.INFO, customer + " rides on " + this);
         release();
         customer.setTripIsDone(true);
     }
 
     private void release() {
         free.set(true);
-        LOGGER.log(Level.INFO, this.toString() + " is free!");
+        LOGGER.log(Level.INFO, this + " is free!");
     }
 
     @Override
