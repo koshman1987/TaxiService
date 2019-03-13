@@ -1,15 +1,19 @@
 package parser;
 
 import entity.Car;
+import entity.Company;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CarsParser {
     private static CarsParser carsParser;
     private static List<Car> cars = new ArrayList<>();
+    private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
     private CarsParser() {
     }
@@ -34,6 +38,8 @@ public class CarsParser {
                 Car car = new Car();
                 car.setId(Integer.parseInt(matcher.group()));
                 cars.add(car);
+                LOGGER.log(Level.INFO, ValueParser.getInstance().getValue("Id", splitedText[i]).toString());
+                LOGGER.log(Level.INFO, ValueParser.getInstance().getValue("Color", splitedText[i]).toString());
             }
         }
 

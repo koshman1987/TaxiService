@@ -14,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Company {
     private static Company company;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
+    private static AtomicBoolean carsCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
     private List<Car> cars = new ArrayList<>();
     private static final String FILE_PATH = "C:\\Users\\Viachaslau_Koshman\\IdeaProjects\\TaxiService\\cars.csv";
@@ -28,8 +29,13 @@ public class Company {
 
             try {
                 company = new Company();
-                company.prepareCars();
+
+                if (!carsCreated.get()) {
+                    company.prepareCars();
+                }
+
                 instanceCreated.set(true);
+                carsCreated.set(true);
             } finally {
                 lock.unlock();
             }
