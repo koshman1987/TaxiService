@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public final class Company {
+public class Company {
     private static Company company;
     private static Lock lock = new ReentrantLock();
     private List<Car> cars = new ArrayList<>();
