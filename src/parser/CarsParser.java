@@ -34,9 +34,12 @@ public class CarsParser {
 
             for (int i = 0; i < splitedText.length; i++) {
                 Matcher matcher = pattern.matcher(splitedText[i]);
-                matcher.find();
-                Car car = new Car(Integer.parseInt(matcher.group()));
-                cars.add(car);
+
+                if (matcher.find()) {
+                    Car car = new Car(Integer.parseInt(matcher.group()));
+                    cars.add(car);
+                }
+
                 LOGGER.log(Level.INFO, ValueParser.getInstance().getValue("Id", splitedText[i]).toString());
                 LOGGER.log(Level.INFO, ValueParser.getInstance().getValue("Color", splitedText[i]).toString());
             }
