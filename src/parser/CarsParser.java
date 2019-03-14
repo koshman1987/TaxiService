@@ -11,25 +11,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CarsParser {
-    private static CarsParser carsParser;
     private static List<Car> cars = new ArrayList<>();
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
+    private static final AttributeValueParser attributeValueParser = new AttributeValueParser();
 
-    private CarsParser() {
-    }
-
-    public static CarsParser getInstance() {
-        if (carsParser == null) {
-            carsParser = new CarsParser();
-        }
-
-        return carsParser;
-    }
-
-    public static List<Car> getCars(List<String> carList) {
+    public List<Car> getCars(final List<String> carList) {
         Pattern pattern = Pattern.compile("\\d+");
 
-        for (String fileLine : carList) {
+        for (final String fileLine : carList) {
             String[] splitedText = fileLine.split(",");
 
             for (int i = 0; i < splitedText.length; i++) {
@@ -40,8 +29,8 @@ public class CarsParser {
                     cars.add(car);
                 }
 
-                LOGGER.log(Level.INFO, ValueParser.getInstance().getValue("Id", splitedText[i]).toString());
-                LOGGER.log(Level.INFO, ValueParser.getInstance().getValue("Color", splitedText[i]).toString());
+                LOGGER.log(Level.INFO, attributeValueParser.getValue("Id", splitedText[i]).toString());
+                LOGGER.log(Level.INFO, attributeValueParser.getValue("Color", splitedText[i]).toString());
             }
         }
 
