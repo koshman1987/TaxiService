@@ -1,5 +1,7 @@
 package parser;
 
+import static parser.AttributeValueParser.*;
+
 import entity.Car;
 import entity.Company;
 
@@ -13,13 +15,15 @@ import java.util.regex.Pattern;
 public class CarsParser {
     private static List<Car> cars = new ArrayList<>();
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
-    private static final AttributeValueParser attributeValueParser = new AttributeValueParser();
+    private static final AttributeValueParser<Integer> idParser = new AttributeValueParser();
+    private static final AttributeValueParser<String> colorParser = new AttributeValueParser();
+    private static final String REGEX = "\\d+";
 
     public List<Car> getCars(final List<String> carList) {
-        Pattern pattern = Pattern.compile("\\d+");
+        final Pattern pattern = Pattern.compile(REGEX);
 
         for (final String fileLine : carList) {
-            String[] splitedText = fileLine.split(",");
+            final String[] splitedText = fileLine.split(",");
 
             for (int i = 0; i < splitedText.length; i++) {
                 Matcher matcher = pattern.matcher(splitedText[i]);
@@ -29,8 +33,8 @@ public class CarsParser {
                     cars.add(car);
                 }
 
-                LOGGER.log(Level.INFO, attributeValueParser.getValue("Id", splitedText[i]).toString());
-                LOGGER.log(Level.INFO, attributeValueParser.getValue("Color", splitedText[i]).toString());
+                LOGGER.log(Level.INFO, String.valueOf(idParser.getValue(ID, splitedText[i])));
+                LOGGER.log(Level.INFO, colorParser.getValue(COLOR, splitedText[i]));
             }
         }
 

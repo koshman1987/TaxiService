@@ -12,22 +12,23 @@ import java.util.logging.Logger;
 
 public class Company {
     private static Company company;
-    private static AtomicBoolean instanceCreated = new AtomicBoolean();
+    private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
     private static final String FILE_PATH = "cars.csv";
-    private static final List<Car> CARS = new CarsParser().getCars(new CarsFileReader().parseCarList(FILE_PATH));
+    private List<Car> cars;
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
     private Company() {
+        cars = getCars(FILE_PATH);
     }
 
     public static Company getInstance() {
         lock.lock();
 
         try {
-            if (!Company.instanceCreated.get()) {
+            if (!instanceCreated.get()) {
                 company = new Company();
-                Company.instanceCreated.getAndSet(true);
+                instanceCreated.set(true);
             }
         } finally {
             lock.unlock();
@@ -42,12 +43,16 @@ public class Company {
     }
 
     private void processOrder(final Customer customer) {
-        for (Car car : CARS) {
+        for (Car car : cars) {
             if (car.isFree().get()) {
                 if (!customer.isTripDone()) {
                     car.occupy(customer);
                 }
             }
         }
+    }
+
+    private static List<Car> getCars(String filePath) {
+        return new CarsParser().getCars(new CarsFileReader().parseCarList(FILE_PATH));
     }
 }
