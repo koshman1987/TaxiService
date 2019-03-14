@@ -17,7 +17,7 @@ public class AttributeValueParser {
             case ID:
                 Matcher idMatcher = ID_PATTERN.matcher(stringValue);
 
-                if (idMatcher.find()) {
+                while (idMatcher.find()) {
                     value = idMatcher.group().substring(SIX, EIGHT);
                 }
 
@@ -26,7 +26,7 @@ public class AttributeValueParser {
             case COLOR:
                 Matcher colorMatcher = COLOR_PATTERN.matcher(stringValue);
 
-                if (colorMatcher.find()) {
+                while (colorMatcher.find()) {
                     value = colorMatcher.group().substring(EIGHT);
                 }
 

@@ -24,7 +24,7 @@ public class CarsParser {
             for (int i = 0; i < splitedText.length; i++) {
                 Matcher matcher = pattern.matcher(splitedText[i]);
 
-                if (matcher.find()) {
+                while (matcher.find()) {
                     Car car = new Car(Integer.parseInt(matcher.group()));
                     cars.add(car);
                 }
