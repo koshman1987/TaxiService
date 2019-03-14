@@ -18,20 +18,22 @@ public class Company {
     private List<Car> cars;
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
-    private Company() {
-        cars = getCars(FILE_PATH);
+    private Company(final List<Car> cars) {
+        this.cars = cars;
     }
 
     public static Company getInstance() {
-        lock.lock();
+        if (!instanceCreated.get()) {
+            lock.lock();
 
-        try {
-            if (!instanceCreated.get()) {
-                company = new Company();
-                instanceCreated.set(true);
+            try {
+                if (company == null) {
+                    company = new Company(getCars(FILE_PATH));
+                    instanceCreated.set(true);
+                }
+            } finally {
+                lock.unlock();
             }
-        } finally {
-            lock.unlock();
         }
 
         return company;

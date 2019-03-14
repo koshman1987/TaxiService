@@ -17,16 +17,16 @@ public class CarsParser {
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
     private static final AttributeValueParser<Integer> idParser = new AttributeValueParser();
     private static final AttributeValueParser<String> colorParser = new AttributeValueParser();
-    private static final String REGEX = "\\d+";
+    private static final String CAR_REGEX = "\\d+";
 
     public List<Car> getCars(final List<String> carList) {
-        final Pattern pattern = Pattern.compile(REGEX);
+        final Pattern pattern = Pattern.compile(CAR_REGEX);
 
         for (final String fileLine : carList) {
             final String[] splitedText = fileLine.split(",");
 
             for (int i = 0; i < splitedText.length; i++) {
-                Matcher matcher = pattern.matcher(splitedText[i]);
+                final Matcher matcher = pattern.matcher(splitedText[i]);
 
                 while (matcher.find()) {
                     Car car = new Car(Integer.parseInt(matcher.group()));
