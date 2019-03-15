@@ -10,14 +10,10 @@ import java.util.List;
 
 public class CarsFileReader {
     public List<String> parseCarList(final String filePath) {
-        List<String> cars = new ArrayList<>();
-
         try {
-            cars = Files.readAllLines(Paths.get(filePath));
+            return Files.readAllLines(Paths.get(filePath));
         } catch (IOException e) {
-            return cars;
+            return new ArrayList<>();
         }
-
-        return cars;
     }
 }
