@@ -16,7 +16,7 @@ public class Company {
     private static Company company;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
-    private static final String FILE_PATH = "./src/main/resources/cars.csv";
+    private static final String FILE_PATH = "./resources/cars.csv";
     private final List<Car> cars;
     private static final Logger LOGGER = LogManager.getLogger(Company.class);
 

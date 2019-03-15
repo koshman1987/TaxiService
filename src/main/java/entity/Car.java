@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
 public class Car {
     private int id;
     private AtomicBoolean free = new AtomicBoolean(true);
