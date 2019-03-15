@@ -1,22 +1,25 @@
 package entity;
 
-import java.util.ArrayList;
+import parser.CarsFileReader;
+import parser.CarsParser;
+
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Company {
     private static Company company;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
-    private static final int COUNT_OF_CARS = 10;
-    private List<Car> cars = new ArrayList<>();
+    private static final String FILE_PATH = "cars.csv";
+    private final List<Car> cars;
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
-    private Company() {
+    private Company(final List<Car> cars) {
+        this.cars = cars;
     }
 
     public static Company getInstance() {
@@ -24,9 +27,10 @@ public class Company {
             lock.lock();
 
             try {
-                company = new Company();
-                company.prepareCars();
-                instanceCreated.set(true);
+                if (company == null) {
+                    company = new Company(getCars(FILE_PATH));
+                    instanceCreated.set(true);
+                }
             } finally {
                 lock.unlock();
             }
@@ -50,9 +54,8 @@ public class Company {
         }
     }
 
-    private void prepareCars() {
-        for (int i = 0; i < COUNT_OF_CARS; i++) {
-            cars.add((new Car((int) (Math.random() * 100))));
-        }
+    private static List<Car> getCars(final String filePath) {
+        return new CarsParser().getCars(new CarsFileReader().parseCarList(FILE_PATH));
+
     }
 }
