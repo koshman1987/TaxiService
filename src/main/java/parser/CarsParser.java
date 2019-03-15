@@ -4,16 +4,16 @@ import static parser.AttributeValueParser.*;
 
 import entity.Car;
 import entity.Company;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CarsParser {
-    private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(Company.class);
     private static final AttributeValueParser parser = new AttributeValueParser();
     private static final String CAR_REGEX = "\\d+";
 
@@ -32,8 +32,8 @@ public class CarsParser {
                     cars.add(car);
                 }
 
-                LOGGER.log(Level.INFO, String.valueOf(parser.getValue(ID, splitedText[i])));
-                LOGGER.log(Level.INFO, parser.getValue(COLOR, splitedText[i]).toString());
+                LOGGER.info(parser.getValue(ID, splitedText[i]));
+                LOGGER.info(parser.getValue(COLOR, splitedText[i]).toString());
             }
         }
 

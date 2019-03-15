@@ -1,13 +1,15 @@
 package entity;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class Car {
     private int id;
     private AtomicBoolean free = new AtomicBoolean(true);
-    private static final Logger LOGGER = Logger.getLogger(Car.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(Car.class);
 
     public Car(int id) {
         this.id = id;
@@ -23,14 +25,14 @@ public class Car {
 
     public void occupy(final Customer customer) {
         free.set(false);
-        LOGGER.log(Level.INFO, customer + " rides on " + this);
+        LOGGER.info(customer + " rides on " + this);
         release();
         customer.setTripIsDone(true);
     }
 
     private void release() {
         free.set(true);
-        LOGGER.log(Level.INFO, this + " is free!");
+        LOGGER.info(this + " is free!");
     }
 
     @Override
