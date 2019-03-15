@@ -32,8 +32,8 @@ public class CarsParser {
                     cars.add(car);
                 }
 
-                LOGGER.info(parser.getValue(ID, splitedText[i]));
-                LOGGER.info(parser.getValue(COLOR, splitedText[i]).toString());
+                //LOGGER.info(parser.getValue(ID, splitedText[i]));
+                //LOGGER.info(parser.getValue(COLOR, splitedText[i]).toString());
             }
         }
 

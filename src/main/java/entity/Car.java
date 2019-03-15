@@ -24,14 +24,14 @@ public class Car {
 
     public void occupy(final Customer customer) {
         free.set(false);
-        LOGGER.info(customer + " rides on " + this);
+        LOGGER.info("Order for client with ID " + customer.getId() + " is being executed");
         release();
         customer.setTripIsDone(true);
     }
 
     private void release() {
         free.set(true);
-        LOGGER.info(this + " is free!");
+        LOGGER.info("Order is completed. Car with ID " + getId() + "  returned to the parking lot");
     }
 
     @Override

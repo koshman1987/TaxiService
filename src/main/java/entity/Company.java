@@ -22,6 +22,7 @@ public class Company {
 
     private Company(final List<Car> cars) {
         this.cars = cars;
+        getInitialInfo();
     }
 
     public static Company getInstance() {
@@ -47,17 +48,31 @@ public class Company {
     }
 
     private void processOrder(final Customer customer) {
+        LOGGER.info("The company took the order from client with ID " + customer.getId());
+        LOGGER.info("Searching for an available car for client with ID " + customer.getId() + " ...");
+
         for (Car car : cars) {
             if (car.isFree().get()) {
                 if (!customer.isTripDone()) {
+                    LOGGER.info("Car with ID " + car.getId() + " is found for client with ID " + customer.getId());
                     car.occupy(customer);
                 }
             }
         }
+
+        LOGGER.info("No free cars, wait");
     }
 
     private static List<Car> getCars(final String filePath) {
         return new CarsParser().getCars(new CarsFileReader().parseCarList(FILE_PATH));
 
+    }
+
+    private void getInitialInfo() {
+        LOGGER.info(cars.size() + " cars are available:");
+
+        for (Car car : cars) {
+            LOGGER.info("Car with ID " + car.getId());
+        }
     }
 }
