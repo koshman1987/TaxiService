@@ -13,13 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CarsParser {
-    private static List<Car> cars = new ArrayList<>();
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
-    private static final AttributeValueParser<Integer> idParser = new AttributeValueParser();
-    private static final AttributeValueParser<String> colorParser = new AttributeValueParser();
+    private static final AttributeValueParser parser = new AttributeValueParser();
     private static final String CAR_REGEX = "\\d+";
 
     public List<Car> getCars(final List<String> carList) {
+        final List<Car> cars = new ArrayList<>();
         final Pattern pattern = Pattern.compile(CAR_REGEX);
 
         for (final String fileLine : carList) {
@@ -29,12 +28,12 @@ public class CarsParser {
                 final Matcher matcher = pattern.matcher(splitedText[i]);
 
                 while (matcher.find()) {
-                    Car car = new Car(Integer.parseInt(matcher.group()));
+                    final Car car = new Car(Integer.parseInt(matcher.group()));
                     cars.add(car);
                 }
 
-                LOGGER.log(Level.INFO, String.valueOf(idParser.getValue(ID, splitedText[i])));
-                LOGGER.log(Level.INFO, colorParser.getValue(COLOR, splitedText[i]));
+                LOGGER.log(Level.INFO, String.valueOf(parser.getValue(ID, splitedText[i])));
+                LOGGER.log(Level.INFO, parser.getValue(COLOR, splitedText[i]).toString());
             }
         }
 

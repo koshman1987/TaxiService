@@ -15,7 +15,7 @@ public class Company {
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
     private static final String FILE_PATH = "cars.csv";
-    private List<Car> cars;
+    private final List<Car> cars;
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
     private Company(final List<Car> cars) {
@@ -54,7 +54,8 @@ public class Company {
         }
     }
 
-    private static List<Car> getCars(String filePath) {
+    private static List<Car> getCars(final String filePath) {
         return new CarsParser().getCars(new CarsFileReader().parseCarList(FILE_PATH));
+
     }
 }

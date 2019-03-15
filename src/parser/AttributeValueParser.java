@@ -4,18 +4,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AttributeValueParser<T> {
-    private static String idRegex = " Id :(.)+";
-    private static String colorRegex = "Color :(.)+";
-    private static String defaultMessage = "Value not found!";
-    private static final Pattern ID_PATTERN = Pattern.compile(idRegex);
-    private static final Pattern COLOR_PATTERN = Pattern.compile(colorRegex);
-    private static Matcher matcher;
+    private static final String ID_REGEX = " Id :(.)+";
+    private static final String COLOR_REGEX = "Color :(.)+";
+    private static final String DEFAULT_MESSAGE = "Value not found!";
+    private static final Pattern ID_PATTERN = Pattern.compile(ID_REGEX);
+    private static final Pattern COLOR_PATTERN = Pattern.compile(COLOR_REGEX);
     static final String ID = "Id";
     static final String COLOR = "Color";
     private static final Integer ID_GROUP_INDEX = 6;
     private static final Integer COLOR_GROUP_INDEX = 8;
 
-    public T getValue(String valueName, String stringValue) {
+    public T getValue(final String valueName, final String stringValue) {
+        Matcher matcher;
+
         switch (valueName) {
             case ID:
                 matcher = ID_PATTERN.matcher(stringValue);
@@ -30,7 +31,7 @@ public class AttributeValueParser<T> {
                 }
 
             default:
-                return (T) defaultMessage;
+                return (T) DEFAULT_MESSAGE;
         }
     }
 }
