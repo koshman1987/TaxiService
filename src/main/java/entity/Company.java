@@ -64,7 +64,7 @@ public class Company {
                 LOGGER.info("Car with ID " + carIterator.next().getId() + " is found for client with ID " + customer.getId());
                 car.occupy(customer);
                 carIterator.remove();
-                LOGGER.info(cars.size() + " cars are available:");
+                LOGGER.info(cars.size() + " cars are available");
 
                 try {
                     TimeUnit.SECONDS.sleep(1);
@@ -84,7 +84,7 @@ public class Company {
     }
 
     private void showCompanyParkInfo() {
-        LOGGER.info(cars.size() + " cars are available");
+        LOGGER.info(cars.size() + " cars are available:");
 
         for (Car car : cars) {
             LOGGER.info("Car with ID " + car.getId());
