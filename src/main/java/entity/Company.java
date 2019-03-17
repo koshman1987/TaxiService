@@ -2,6 +2,7 @@ package entity;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import parser.CarsFileReader;
 import parser.CarsParser;
 
@@ -24,7 +25,7 @@ public class Company {
     private Company(final BlockingQueue<Car> cars) {
         this.cars = cars;
         this.carIterator = cars.iterator();
-        getInitialInfo();
+        showCompanyParkInfo();
     }
 
     public static Company getInstance() {
@@ -54,7 +55,7 @@ public class Company {
         LOGGER.info("Searching for an available car for client with ID " + customer.getId() + " ...");
 
         while (carIterator.hasNext()) {
-            Car car = carIterator.next();
+            final Car car = carIterator.next();
 
             if (!customer.isTripDone()) {
 
@@ -73,18 +74,18 @@ public class Company {
                     LOGGER.error(e.getMessage());
                 }
 
-                cars.add(car);
                 car.release();
+                cars.add(car);
                 LOGGER.info(cars.size() + " cars are available:");
             }
         }
     }
 
     private static BlockingQueue<Car> getCars() {
-        return new CarsParser().getCars(new CarsFileReader().parseCarList(FILE_PATH));
+        return new CarsParser().parseCars(new CarsFileReader().parseCarList(FILE_PATH));
     }
 
-    private void getInitialInfo() {
+    private void showCompanyParkInfo() {
         LOGGER.info(cars.size() + " cars are available:");
 
         for (Car car : cars) {
