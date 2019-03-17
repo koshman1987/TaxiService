@@ -3,11 +3,8 @@ package entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class Car {
     private int id;
-    private AtomicBoolean free = new AtomicBoolean(true);
     private static final Logger LOGGER = LogManager.getLogger(Car.class);
 
     public Car(int id) {
@@ -18,20 +15,13 @@ public class Car {
         return id;
     }
 
-    public AtomicBoolean isFree() {
-        return free;
-    }
-
     public void occupy(final Customer customer) {
-        free.set(false);
-        LOGGER.info(customer + " rides on " + this);
-        release();
+        LOGGER.info("Order for client with ID " + customer.getId() + " is being executed");
         customer.setTripIsDone(true);
     }
 
-    private void release() {
-        free.set(true);
-        LOGGER.info(this + " is free!");
+    public void release() {
+        LOGGER.info("Order is completed. Car with ID " + getId() + "  returned to the parking lot");
     }
 
     @Override
