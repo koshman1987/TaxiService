@@ -1,24 +1,26 @@
 package parser;
 
-import static parser.AttributeValueParser.*;
-
 import entity.Car;
 import entity.Company;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static parser.AttributeValueParser.COLOR;
+import static parser.AttributeValueParser.ID;
 
 public class CarsParser {
     private static final Logger LOGGER = LogManager.getLogger(Company.class);
     private static final AttributeValueParser parser = new AttributeValueParser();
     private static final String CAR_REGEX = "\\d+";
 
-    public List<Car> getCars(final List<String> carList) {
-        final List<Car> cars = new ArrayList<>();
+    public BlockingQueue<Car> getCars(final List<String> carList) {
+        final BlockingQueue<Car> cars = new ArrayBlockingQueue<Car>(10);
         final Pattern pattern = Pattern.compile(CAR_REGEX);
 
         for (final String fileLine : carList) {
@@ -32,8 +34,8 @@ public class CarsParser {
                     cars.add(car);
                 }
 
-                //LOGGER.info(parser.getValue(ID, splitedText[i]));
-                //LOGGER.info(parser.getValue(COLOR, splitedText[i]).toString());
+                LOGGER.info(parser.getValue(ID, splitedText[i]));
+                LOGGER.info(parser.getValue(COLOR, splitedText[i]).toString());
             }
         }
 
