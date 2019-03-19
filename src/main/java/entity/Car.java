@@ -8,20 +8,20 @@ public class Car {
     private Semaphore semaphore;
     private AtomicBoolean isFree = new AtomicBoolean(true);
 
-    public Car(int id, Semaphore semaphore) {
+    public Car(int id) {
         this.id = id;
-        this.semaphore = semaphore;
+        this.semaphore = new Semaphore(1);
     }
 
     public int getId() {
         return id;
     }
 
-    public AtomicBoolean getState() {
+    public AtomicBoolean checkAvailability() {
         return isFree;
     }
 
-    public void setState(AtomicBoolean isFree) {
+    public void setAvailability(final AtomicBoolean isFree) {
         this.isFree = isFree;
     }
 

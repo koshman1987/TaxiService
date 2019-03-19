@@ -11,13 +11,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CarService {
     private static final Logger LOGGER = LogManager.getLogger(Car.class);
 
-    public void occupy(final Customer customer, Car car) {
+    public void occupy(final Customer customer, final Car car) {
         LOGGER.info("Order for client with ID " + customer.getId() + " is being executed");
-        car.setState(new AtomicBoolean(false));
+        car.setAvailability(new AtomicBoolean(false));
     }
 
-    public void release(final Customer customer, Car car) {
+    public void release(final Customer customer, final Car car) {
         LOGGER.info("Order is completed. Car with ID " + car.getId() + " returned to the parking lot");
-        car.setState(new AtomicBoolean(true));
+        car.setAvailability(new AtomicBoolean(true));
     }
 }

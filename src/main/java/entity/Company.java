@@ -59,8 +59,8 @@ public class Company {
         LOGGER.info("The company took the order from client with ID " + customer.getId());
         LOGGER.info("Searching for an available car for client with ID " + customer.getId() + " ...");
 
-        for (Car car : cars) {
-            if (car.getState().get() && !servedCustomers.contains(customer)) {
+        for (final Car car : cars) {
+            if (car.checkAvailability().get() && !servedCustomers.contains(customer)) {
                 try {
                     car.getSemaphore().acquire();
                     LOGGER.info("Car with ID " + car.getId() + " is found for client with ID " + customer.getId());
