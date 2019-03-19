@@ -3,20 +3,26 @@ package entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import parser.CarsFileReader;
-import parser.CarsParser;
+import service.CarService;
 
+import util.CarsFileReader;
+import util.CarsParser;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Company {
-    private static Company company;
+    private static volatile Company instance;
     private static AtomicBoolean instanceCreated = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
     private static final String FILE_PATH = "./resources/cars.csv";
     private final List<Car> cars;
+    private CarService carService = new CarService();
+    private List<Customer> servedCustomers = Collections.synchronizedList(new ArrayList<>());
     private static final Logger LOGGER = LogManager.getLogger(Company.class);
 
     private Company(final List<Car> cars) {
@@ -26,19 +32,22 @@ public class Company {
 
     public static Company getInstance() {
         if (!instanceCreated.get()) {
-            lock.lock();
+            if (instance == null) {
+                lock.lock();
 
-            try {
-                if (company == null) {
-                    company = new Company(getCars());
-                    instanceCreated.set(true);
+                try {
+                    if (instance == null) {
+                        instance = new Company(getCars());
+                        instanceCreated.set(true);
+                    }
+                } finally {
+                    lock.unlock();
                 }
-            } finally {
-                lock.unlock();
+
             }
         }
 
-        return company;
+        return instance;
     }
 
     public void placeOrder(final Customer customer) {
@@ -46,22 +55,23 @@ public class Company {
         processOrder(customer);
     }
 
-    private void processOrder(final Customer customer) {
+    protected void processOrder(final Customer customer) {
         LOGGER.info("The company took the order from client with ID " + customer.getId());
         LOGGER.info("Searching for an available car for client with ID " + customer.getId() + " ...");
 
         for (Car car : cars) {
-            if (!customer.isTripDone() && car.getState().get()) {
-                lock.lock();
-
+            if (car.getState().get() && !servedCustomers.contains(customer)) {
                 try {
+                    car.getSemaphore().acquire();
                     LOGGER.info("Car with ID " + car.getId() + " is found for client with ID " + customer.getId());
-                    car.occupy(customer);
-                } finally {
-                    car.release(customer);
-                    lock.unlock();
+                    carService.occupy(customer, car);
+                    car.getSemaphore().release();
+                } catch (InterruptedException e) {
+                    LOGGER.error(e.getMessage());
                 }
 
+                carService.release(customer, car);
+                servedCustomers.add(customer);
             }
         }
     }

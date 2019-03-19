@@ -1,9 +1,8 @@
 package entity;
 
-public class Customer extends Thread {
+public class Customer {
     private long id;
     private int position;
-    private boolean tripIsDone;
 
     public Customer(int id) {
         this.id = id;
@@ -19,19 +18,6 @@ public class Customer extends Thread {
 
     public void setPosition(int position) {
         this.position = position;
-    }
-
-    @Override
-    public void run() {
-        Company.getInstance().placeOrder(this);
-    }
-
-    public void setTripIsDone(boolean tripIsDone) {
-        this.tripIsDone = tripIsDone;
-    }
-
-    public boolean isTripDone() {
-        return tripIsDone;
     }
 
     @Override
