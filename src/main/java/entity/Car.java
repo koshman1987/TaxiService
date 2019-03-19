@@ -8,9 +8,9 @@ public class Car {
     private Semaphore semaphore;
     private AtomicBoolean isFree = new AtomicBoolean(true);
 
-    public Car(int id) {
+    public Car(int id, final Semaphore semaphore) {
         this.id = id;
-        this.semaphore = new Semaphore(1);
+        this.semaphore = semaphore;
     }
 
     public int getId() {

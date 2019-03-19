@@ -11,6 +11,7 @@ import util.CarsParser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -61,17 +62,26 @@ public class Company {
 
         for (final Car car : cars) {
             if (car.checkAvailability().get() && !servedCustomers.contains(customer)) {
+
                 try {
+                    TimeUnit.SECONDS.sleep(1);
                     car.getSemaphore().acquire();
-                    LOGGER.info("Car with ID " + car.getId() + " is found for client with ID " + customer.getId());
-                    carService.occupy(customer, car);
+                    lock.lock();
+
+                    try {
+                        LOGGER.info("Car with ID " + car.getId() + " is found for client with ID " + customer.getId());
+                        carService.occupy(customer, car);
+                    } finally {
+                        lock.unlock();
+                    }
+
+                    carService.release(customer, car);
+                    servedCustomers.add(customer);
                     car.getSemaphore().release();
                 } catch (InterruptedException e) {
                     LOGGER.error(e.getMessage());
                 }
 
-                carService.release(customer, car);
-                servedCustomers.add(customer);
             }
         }
     }
