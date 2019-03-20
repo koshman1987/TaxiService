@@ -1,27 +1,32 @@
 package entity;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Car {
     private int id;
-    private static final Logger LOGGER = LogManager.getLogger(Car.class);
+    private Semaphore semaphore;
+    private AtomicBoolean isFree = new AtomicBoolean(true);
 
-    public Car(int id) {
+    public Car(final int id, final Semaphore semaphore) {
         this.id = id;
+        this.semaphore = semaphore;
     }
 
     public int getId() {
         return id;
     }
 
-    public void occupy(final Customer customer) {
-        LOGGER.info("Order for client with ID " + customer.getId() + " is being executed");
-        customer.setTripIsDone(true);
+    public AtomicBoolean isAvailable() {
+        return isFree;
     }
 
-    public void release() {
-        LOGGER.info("Order is completed. Car with ID " + getId() + "  returned to the parking lot");
+    public void setIsAvailable(final AtomicBoolean isFree) {
+        this.isFree = isFree;
+    }
+
+    public Semaphore getSemaphore() {
+        return semaphore;
     }
 
     @Override

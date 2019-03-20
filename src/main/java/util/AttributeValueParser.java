@@ -1,4 +1,4 @@
-package parser;
+package util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,5 +33,6 @@ public class AttributeValueParser<T> {
             default:
                 return (T) DEFAULT_MESSAGE;
         }
+
     }
 }
