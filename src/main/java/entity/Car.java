@@ -8,7 +8,7 @@ public class Car {
     private Semaphore semaphore;
     private AtomicBoolean isFree = new AtomicBoolean(true);
 
-    public Car(int id, final Semaphore semaphore) {
+    public Car(final int id, final Semaphore semaphore) {
         this.id = id;
         this.semaphore = semaphore;
     }
@@ -17,11 +17,11 @@ public class Car {
         return id;
     }
 
-    public AtomicBoolean checkAvailability() {
+    public AtomicBoolean isAvailable() {
         return isFree;
     }
 
-    public void setAvailability(final AtomicBoolean isFree) {
+    public void setIsAvailable(final AtomicBoolean isFree) {
         this.isFree = isFree;
     }
 

@@ -61,10 +61,9 @@ public class Company {
         LOGGER.info("Searching for an available car for client with ID " + customer.getId() + " ...");
 
         for (final Car car : cars) {
-            if (car.checkAvailability().get() && !servedCustomers.contains(customer)) {
+            if (car.isAvailable().get() && !servedCustomers.contains(customer)) {
 
                 try {
-                    TimeUnit.SECONDS.sleep(1);
                     car.getSemaphore().acquire();
                     lock.lock();
 
@@ -75,7 +74,9 @@ public class Company {
                         lock.unlock();
                     }
 
+
                     carService.release(customer, car);
+                    TimeUnit.SECONDS.sleep(1);
                     servedCustomers.add(customer);
                     car.getSemaphore().release();
                 } catch (InterruptedException e) {

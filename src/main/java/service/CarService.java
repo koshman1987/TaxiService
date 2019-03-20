@@ -13,11 +13,11 @@ public class CarService {
 
     public void occupy(final Customer customer, final Car car) {
         LOGGER.info("Order for client with ID " + customer.getId() + " is being executed");
-        car.setAvailability(new AtomicBoolean(false));
+        car.setIsAvailable(new AtomicBoolean(false));
     }
 
     public void release(final Customer customer, final Car car) {
         LOGGER.info("Order is completed. Car with ID " + car.getId() + " returned to the parking lot");
-        car.setAvailability(new AtomicBoolean(true));
+        car.setIsAvailable(new AtomicBoolean(true));
     }
 }
